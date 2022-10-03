@@ -13,13 +13,14 @@ namespace GameOfNumbers
 {
     public partial class Game_Form : Form
     {
-        private const int _game_sleep = 400;
+        private const int _game_sleep = 100;
 
         private Game _game;
         private NewGame_Form _new_game_dialoge;
         private Label[] _names_labels;
         private Label[] _card_labels;
         private Label[] _score_labels;
+        private Label[] _win_labels;
 
 
         public Game_Form()
@@ -33,21 +34,25 @@ namespace GameOfNumbers
             _game.Round_Played += Show_Result_Cards;
             _game.Winer_Founded += Show_Winers;
             _game.Game_Finished += Show_Results;
+            _game.Game_Aborted += delegate (int[] _) { MessageBox.Show("Game was aborted!"); };
 
             _names_labels = new Label[Game.PLAYERS_COUNT] { Name_Label1, Name_Label2, Name_Label3, Name_Label4 };
             _card_labels = new Label[Game.PLAYERS_COUNT] { Card1, Card2, Card3, Card4 };
             _score_labels = new Label[Game.PLAYERS_COUNT] { Score_Label1, Score_Label2, Score_Label3, Score_Label4 };
+            _win_labels = new Label[Game.PLAYERS_COUNT] { Win_Label1, Win_Label2, Win_Label3, Win_Label4 };
         }
 
         private void Clear_UI()
         {
-            Invoke((MethodInvoker)delegate () { Text = "0"; });
-            for (int i = 0; i < Game.PLAYERS_COUNT; i++)
+            Invoke((MethodInvoker)delegate ()
             {
-                _names_labels[i].Text = _game.Players[i].Name;
-                _score_labels[i].Text = "0";
-                Round_Label.Text = $"1 / {Game.ROUNDS_COUNT}";
-            }
+                for (int i = 0; i < Game.PLAYERS_COUNT; i++)
+                {
+                    _names_labels[i].Text = _game.Players[i].Name;
+                    _score_labels[i].Text = "0";
+                    Round_Label.Text = $"1 / {Game.ROUNDS_COUNT}";
+                }
+            });
         }
 
         private void FlipCards()
@@ -103,12 +108,14 @@ namespace GameOfNumbers
         {
             Invoke((MethodInvoker)delegate () { Text = "5"; });
             string[] names = _game.Players.Where(p => id.Contains(p.ID)).Select(p => p.Name).ToArray();
-            string winers_list = "";
-            foreach (string name in names)
-            {
-                winers_list += name + ", ";
-            }
-            MessageBox.Show($"Game finished, winer(-s) {winers_list.Trim(new char[] { ' ', ','})}!");
+
+            UpdateCards(_game.Players.Select(p => p.Score.ToString()).ToArray(), Color.White);
+            Show_Winers(id);
+            foreach (int i in id)
+                Invoke((MethodInvoker)delegate () { _win_labels[i].Text = (int.Parse(_win_labels[i].Text) + 1).ToString(); });
+
+            Thread.Sleep(500);
+            _game.RestartGame();
         }
 
         private void NewGame_TSMI_Click(object sender, EventArgs e)
@@ -116,6 +123,8 @@ namespace GameOfNumbers
             if (_new_game_dialoge.ShowDialog() == DialogResult.OK)
             {
                 Player[] players = _new_game_dialoge.Result;
+                for (int i = 0; i < Game.PLAYERS_COUNT; i++)
+                    _win_labels[i].Text = "0";
                 _new_game_dialoge.ClearResult();
                 _game.StartGame(players);
             }
@@ -124,6 +133,16 @@ namespace GameOfNumbers
         private void RestartGame_TSMI_Click(object sender, EventArgs e)
         {
             _game.RestartGame();
+        }
+
+        private void AbortGame_TSMI_Click(object sender, EventArgs e)
+        {
+            _game.AbortGame();
+        }
+
+        private void StartTrain_TSMI_Click(object sender, EventArgs e)
+        {
+            new Training_Form().ShowDialog();
         }
     }
 }

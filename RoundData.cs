@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GameOfNumbers
 {
-    public enum Player_Type
+    public struct RoundData
     {
-        Human,
-        NeuralNet,
-        Random
+        public int[] Players_Cards;
+        public int[] Result_Cards;
+        public int[] Winers_ID;
     }
 }

@@ -7,18 +7,25 @@ using System.Windows.Forms;
 
 namespace GameOfNumbers
 {
-    public class Human_Player: Player
+    public class Human_Player : Player
     {
         private Human_Form _my_form;
 
 
-        public Human_Player(int id, string name): base(id, name)
+        public Human_Player(string name): base(name)
         {
             _my_form = new Human_Form(name);
         }
 
-        public override void Play_Card()
+        public override void Game_Result(int[] winers)
+        {   }
+
+        public override void LastRound_Result(RoundData result, int _)
+        {   }
+
+        public override void Play_Card(RoundData[] history)
         {
+            _my_form.Set_History(history);
             while (true)
             {
                 if (_my_form.Play_Card(_cards) == DialogResult.OK)

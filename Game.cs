@@ -12,7 +12,24 @@ namespace GameOfNumbers
         public const int PLAYERS_COUNT = 4;
         public const int ROUNDS_COUNT = 8;
         public static readonly int[] CARDS_SET = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        public static readonly Random Randomizer = new Random();
+        public static Random Randomizer
+        {
+            get
+            {
+                lock (_random_locker)
+                {
+                    if (++_random_geted > 1000)
+                    {
+                        _randomizer = new Random();
+                        _random_geted = 0;
+                    }
+                    return _randomizer;
+                }
+            }
+        }
+        private static object _random_locker = new object();
+        private static int _random_geted = 0;
+        private static Random _randomizer = new Random();
 
         public Player[] Players => _players;
         public int Round => _round;
@@ -20,13 +37,17 @@ namespace GameOfNumbers
 
         public Action Game_Started;
         public Action<int[]> Game_Finished;
+        public Action<int[]> Game_Aborted;
         public Action<int[]> Players_Played;
         public Action<int[]> Round_Played;
         public Action Round_Started;
         public Action<int[]> Winer_Founded;
 
+        public Action<RoundData, int> Give_Round_Results;
+
         private bool _redy_for_new_game;
 
+        private RoundData[] _history;
         private int _round;
         private Player[] _players;
 
@@ -34,8 +55,8 @@ namespace GameOfNumbers
         private bool[] _players_played;
 
         private int _sleep;
-
         private object _locker;
+        private bool _abort;
 
         private Player[] _winers
         {
@@ -53,10 +74,13 @@ namespace GameOfNumbers
         {
             _locker = new object();
             _sleep = sleep_delay;
+            _history = new RoundData[0];
             Round_Started += On_Round_Started;
             Winer_Founded += Add_Score;
             Game_Finished += ClearSubscribers;
+            Game_Aborted += ClearSubscribers;
             _redy_for_new_game = true;
+            _abort = false;
         }
 
         public void StartGame(Player[] players)
@@ -73,12 +97,23 @@ namespace GameOfNumbers
             BeginGame();
         }
 
+        public void AbortGame()
+        {
+            if (_redy_for_new_game == false)
+                _abort = true;
+        }
+
         private void ClearSubscribers(int[] _)
         {
             foreach (Player p in _players)
+            {
                 p.Card_Played -= On_Player_Played;
+                Give_Round_Results -= p.LastRound_Result;
+                Game_Finished -= p.Game_Result;
+            }
 
             _redy_for_new_game = true;
+            _abort = false;
         }
 
         public void RestartGame()
@@ -97,13 +132,17 @@ namespace GameOfNumbers
 
         private void BeginGame()
         {
+            _history = new RoundData[0];
             _redy_for_new_game = false;
             _round = 0;
 
-            foreach (Player p in _players)
+            for (int i = 0; i < PLAYERS_COUNT; i++)
             {
-                p.Card_Played += On_Player_Played;
-                p.Init_Cards(CARDS_SET[Randomizer.Next(CARDS_SET.Length)]);
+                Player player = _players[i];
+                player.Card_Played += On_Player_Played;
+                Give_Round_Results += player.LastRound_Result;
+                Game_Finished += player.Game_Result;
+                player.Init(i, CARDS_SET[Randomizer.Next(CARDS_SET.Length)]);
             }
 
             // Game was start
@@ -129,7 +168,7 @@ namespace GameOfNumbers
             Clear();
             foreach (var player in _players)
             {
-                new Task(player.Play_Card).Start();
+                new Task(delegate() { player.Play_Card(_history); }).Start();
             }
         }
         private void On_Player_Played(int id, int card)
@@ -143,25 +182,42 @@ namespace GameOfNumbers
                 // All is played
                 if (_players_played.All(p => p == true))
                 {
+                    if (_abort)
+                    {
+                        Game_Aborted?.Invoke(null);
+                        return;
+                    }
+
+                    RoundData data = new RoundData();
+
                     // Whait some time
                     Thread.Sleep(_sleep);
 
                     // Show what players are played
                     Players_Played?.Invoke(_players_cards);
+                    data.Players_Cards = _players_cards.ToArray();
 
                     // Whait some time
                     Thread.Sleep(_sleep);
 
                     // Show what hepend
                     Use_GameRules();
+                    data.Result_Cards = _players_cards.ToArray();
 
                     // Whait some time
                     Thread.Sleep(_sleep);
 
                     // Who is win?
-                    Find_Round_Winer();
+                    int[] winers = Find_Round_Winer();
 
+                    Winer_Founded?.Invoke(winers);
+                    data.Winers_ID = winers;
+
+                    _history = _history.Append(data).ToArray();
                     _round++;
+
+                    Give_Round_Results?.Invoke(data, _round);
+
                     // If not final invoke next one
                     if (_round < ROUNDS_COUNT)
                         Round_Started?.Invoke();
@@ -171,25 +227,25 @@ namespace GameOfNumbers
             }
         }
 
-        private void Find_Round_Winer()
+        private int[] Find_Round_Winer()
         {
             int max = 0;
             foreach (int card in _players_cards)
                 if (card > max)
                     max = card;
-            if (max == 0)
-            {
-                Winer_Founded?.Invoke(new int[0]);
-                return;
-            }
 
             int[] result = new int[0];
-            for(int i = 0; i < PLAYERS_COUNT; i++)
+            if (max == 0)
+            {
+                return result;
+            }
+
+            for (int i = 0; i < PLAYERS_COUNT; i++)
             {
                 if (_players_cards[i] == max)
                     result = result.Append(i).ToArray();
             }
-            Winer_Founded?.Invoke(result);
+            return result;
         }
 
         private void Use_GameRules()

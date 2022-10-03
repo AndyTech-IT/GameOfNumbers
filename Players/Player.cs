@@ -19,6 +19,8 @@ namespace GameOfNumbers
         public string Name => _name;
         public int[] Cards => _cards;
         public int Score => _score;
+        
+
         public void Add_Score(int value)
         {
             _score += value;
@@ -26,19 +28,21 @@ namespace GameOfNumbers
 
         public Action<int, int> Card_Played;
 
-        public Player(int id, string name)
+        public Player(string name)
         {
-            _id = id;
             _name = name;
         }
 
-        public void Init_Cards(int blocked_card)
+        public void Init(int id, int blocked_card)
         {
+            _id = id;
             _cards = Game.CARDS_SET.Where(c => c != blocked_card).ToArray();
             _score = 0;
         }
 
-        public abstract void Play_Card();
+        public abstract void Play_Card(RoundData[] history);
+        public abstract void LastRound_Result(RoundData result, int round);
+        public abstract void Game_Result(int[] winers);
 
         protected void Play_Card(int card)
         {

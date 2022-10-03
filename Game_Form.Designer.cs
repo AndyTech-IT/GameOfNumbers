@@ -32,6 +32,7 @@ namespace GameOfNumbers
             System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
             this.NewGame_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.RestartGame_TSMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.AbortGame_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.Card1 = new System.Windows.Forms.Label();
             this.Card2 = new System.Windows.Forms.Label();
             this.Card3 = new System.Windows.Forms.Label();
@@ -46,6 +47,11 @@ namespace GameOfNumbers
             this.Score_Label4 = new System.Windows.Forms.Label();
             this.Round_Label = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.StartTrain_TSMI = new System.Windows.Forms.ToolStripMenuItem();
+            this.Win_Label4 = new System.Windows.Forms.Label();
+            this.Win_Label3 = new System.Windows.Forms.Label();
+            this.Win_Label2 = new System.Windows.Forms.Label();
+            this.Win_Label1 = new System.Windows.Forms.Label();
             gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +60,8 @@ namespace GameOfNumbers
             // 
             gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NewGame_TSMI,
-            this.RestartGame_TSMI});
+            this.RestartGame_TSMI,
+            this.AbortGame_TSMI});
             gameToolStripMenuItem.Name = "gameToolStripMenuItem";
             gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             gameToolStripMenuItem.Text = "Game";
@@ -62,23 +69,30 @@ namespace GameOfNumbers
             // NewGame_TSMI
             // 
             this.NewGame_TSMI.Name = "NewGame_TSMI";
-            this.NewGame_TSMI.Size = new System.Drawing.Size(180, 22);
+            this.NewGame_TSMI.Size = new System.Drawing.Size(110, 22);
             this.NewGame_TSMI.Text = "New...";
             this.NewGame_TSMI.Click += new System.EventHandler(this.NewGame_TSMI_Click);
             // 
             // RestartGame_TSMI
             // 
             this.RestartGame_TSMI.Name = "RestartGame_TSMI";
-            this.RestartGame_TSMI.Size = new System.Drawing.Size(180, 22);
+            this.RestartGame_TSMI.Size = new System.Drawing.Size(110, 22);
             this.RestartGame_TSMI.Text = "Restart";
             this.RestartGame_TSMI.Click += new System.EventHandler(this.RestartGame_TSMI_Click);
+            // 
+            // AbortGame_TSMI
+            // 
+            this.AbortGame_TSMI.Name = "AbortGame_TSMI";
+            this.AbortGame_TSMI.Size = new System.Drawing.Size(110, 22);
+            this.AbortGame_TSMI.Text = "Abort";
+            this.AbortGame_TSMI.Click += new System.EventHandler(this.AbortGame_TSMI_Click);
             // 
             // Card1
             // 
             this.Card1.BackColor = System.Drawing.Color.White;
             this.Card1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Card1.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Card1.Location = new System.Drawing.Point(120, 203);
+            this.Card1.Location = new System.Drawing.Point(119, 182);
             this.Card1.Name = "Card1";
             this.Card1.Size = new System.Drawing.Size(100, 150);
             this.Card1.TabIndex = 0;
@@ -90,7 +104,7 @@ namespace GameOfNumbers
             this.Card2.BackColor = System.Drawing.Color.White;
             this.Card2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Card2.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Card2.Location = new System.Drawing.Point(272, 203);
+            this.Card2.Location = new System.Drawing.Point(271, 182);
             this.Card2.Name = "Card2";
             this.Card2.Size = new System.Drawing.Size(100, 150);
             this.Card2.TabIndex = 1;
@@ -102,7 +116,7 @@ namespace GameOfNumbers
             this.Card3.BackColor = System.Drawing.Color.White;
             this.Card3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Card3.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Card3.Location = new System.Drawing.Point(424, 203);
+            this.Card3.Location = new System.Drawing.Point(423, 182);
             this.Card3.Name = "Card3";
             this.Card3.Size = new System.Drawing.Size(100, 150);
             this.Card3.TabIndex = 2;
@@ -114,7 +128,7 @@ namespace GameOfNumbers
             this.Card4.BackColor = System.Drawing.Color.White;
             this.Card4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Card4.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Card4.Location = new System.Drawing.Point(576, 203);
+            this.Card4.Location = new System.Drawing.Point(575, 182);
             this.Card4.Name = "Card4";
             this.Card4.Size = new System.Drawing.Size(100, 150);
             this.Card4.TabIndex = 3;
@@ -123,7 +137,7 @@ namespace GameOfNumbers
             // 
             // Name_Label1
             // 
-            this.Name_Label1.Location = new System.Drawing.Point(120, 167);
+            this.Name_Label1.Location = new System.Drawing.Point(119, 146);
             this.Name_Label1.Name = "Name_Label1";
             this.Name_Label1.Size = new System.Drawing.Size(100, 23);
             this.Name_Label1.TabIndex = 4;
@@ -132,7 +146,7 @@ namespace GameOfNumbers
             // 
             // Name_Label2
             // 
-            this.Name_Label2.Location = new System.Drawing.Point(272, 167);
+            this.Name_Label2.Location = new System.Drawing.Point(271, 146);
             this.Name_Label2.Name = "Name_Label2";
             this.Name_Label2.Size = new System.Drawing.Size(100, 23);
             this.Name_Label2.TabIndex = 5;
@@ -141,7 +155,7 @@ namespace GameOfNumbers
             // 
             // Name_Label3
             // 
-            this.Name_Label3.Location = new System.Drawing.Point(424, 167);
+            this.Name_Label3.Location = new System.Drawing.Point(423, 146);
             this.Name_Label3.Name = "Name_Label3";
             this.Name_Label3.Size = new System.Drawing.Size(100, 23);
             this.Name_Label3.TabIndex = 6;
@@ -150,7 +164,7 @@ namespace GameOfNumbers
             // 
             // Name_Label4
             // 
-            this.Name_Label4.Location = new System.Drawing.Point(576, 167);
+            this.Name_Label4.Location = new System.Drawing.Point(575, 146);
             this.Name_Label4.Name = "Name_Label4";
             this.Name_Label4.Size = new System.Drawing.Size(100, 23);
             this.Name_Label4.TabIndex = 7;
@@ -160,7 +174,7 @@ namespace GameOfNumbers
             // Score_Label1
             // 
             this.Score_Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Score_Label1.Location = new System.Drawing.Point(120, 371);
+            this.Score_Label1.Location = new System.Drawing.Point(119, 350);
             this.Score_Label1.Name = "Score_Label1";
             this.Score_Label1.Size = new System.Drawing.Size(100, 23);
             this.Score_Label1.TabIndex = 8;
@@ -170,7 +184,7 @@ namespace GameOfNumbers
             // Score_Label2
             // 
             this.Score_Label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Score_Label2.Location = new System.Drawing.Point(272, 371);
+            this.Score_Label2.Location = new System.Drawing.Point(271, 350);
             this.Score_Label2.Name = "Score_Label2";
             this.Score_Label2.Size = new System.Drawing.Size(100, 23);
             this.Score_Label2.TabIndex = 9;
@@ -180,7 +194,7 @@ namespace GameOfNumbers
             // Score_Label3
             // 
             this.Score_Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Score_Label3.Location = new System.Drawing.Point(424, 371);
+            this.Score_Label3.Location = new System.Drawing.Point(423, 350);
             this.Score_Label3.Name = "Score_Label3";
             this.Score_Label3.Size = new System.Drawing.Size(100, 23);
             this.Score_Label3.TabIndex = 10;
@@ -190,7 +204,7 @@ namespace GameOfNumbers
             // Score_Label4
             // 
             this.Score_Label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Score_Label4.Location = new System.Drawing.Point(576, 371);
+            this.Score_Label4.Location = new System.Drawing.Point(575, 350);
             this.Score_Label4.Name = "Score_Label4";
             this.Score_Label4.Size = new System.Drawing.Size(100, 23);
             this.Score_Label4.TabIndex = 11;
@@ -212,18 +226,74 @@ namespace GameOfNumbers
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            gameToolStripMenuItem});
+            gameToolStripMenuItem,
+            this.StartTrain_TSMI});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // StartTrain_TSMI
+            // 
+            this.StartTrain_TSMI.Name = "StartTrain_TSMI";
+            this.StartTrain_TSMI.Size = new System.Drawing.Size(44, 20);
+            this.StartTrain_TSMI.Text = "Train";
+            this.StartTrain_TSMI.Click += new System.EventHandler(this.StartTrain_TSMI_Click);
+            // 
+            // Win_Label4
+            // 
+            this.Win_Label4.BackColor = System.Drawing.Color.Yellow;
+            this.Win_Label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Win_Label4.Location = new System.Drawing.Point(575, 397);
+            this.Win_Label4.Name = "Win_Label4";
+            this.Win_Label4.Size = new System.Drawing.Size(100, 23);
+            this.Win_Label4.TabIndex = 17;
+            this.Win_Label4.Text = "9";
+            this.Win_Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Win_Label3
+            // 
+            this.Win_Label3.BackColor = System.Drawing.Color.Yellow;
+            this.Win_Label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Win_Label3.Location = new System.Drawing.Point(423, 397);
+            this.Win_Label3.Name = "Win_Label3";
+            this.Win_Label3.Size = new System.Drawing.Size(100, 23);
+            this.Win_Label3.TabIndex = 16;
+            this.Win_Label3.Text = "9";
+            this.Win_Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Win_Label2
+            // 
+            this.Win_Label2.BackColor = System.Drawing.Color.Yellow;
+            this.Win_Label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Win_Label2.Location = new System.Drawing.Point(271, 397);
+            this.Win_Label2.Name = "Win_Label2";
+            this.Win_Label2.Size = new System.Drawing.Size(100, 23);
+            this.Win_Label2.TabIndex = 15;
+            this.Win_Label2.Text = "9";
+            this.Win_Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // Win_Label1
+            // 
+            this.Win_Label1.BackColor = System.Drawing.Color.Yellow;
+            this.Win_Label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Win_Label1.Location = new System.Drawing.Point(119, 397);
+            this.Win_Label1.Name = "Win_Label1";
+            this.Win_Label1.Size = new System.Drawing.Size(100, 23);
+            this.Win_Label1.TabIndex = 14;
+            this.Win_Label1.Text = "9";
+            this.Win_Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Game_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.Win_Label4);
+            this.Controls.Add(this.Win_Label3);
+            this.Controls.Add(this.Win_Label2);
+            this.Controls.Add(this.Win_Label1);
             this.Controls.Add(this.Round_Label);
             this.Controls.Add(this.Score_Label4);
             this.Controls.Add(this.Score_Label3);
@@ -267,6 +337,12 @@ namespace GameOfNumbers
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem NewGame_TSMI;
         private System.Windows.Forms.ToolStripMenuItem RestartGame_TSMI;
+        private System.Windows.Forms.ToolStripMenuItem AbortGame_TSMI;
+        private System.Windows.Forms.ToolStripMenuItem StartTrain_TSMI;
+        private System.Windows.Forms.Label Win_Label4;
+        private System.Windows.Forms.Label Win_Label3;
+        private System.Windows.Forms.Label Win_Label2;
+        private System.Windows.Forms.Label Win_Label1;
     }
 }
 

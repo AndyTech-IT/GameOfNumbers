@@ -41,5 +41,26 @@ namespace GameOfNumbers
                 Close();
             }
         }
+
+        public void Set_History(RoundData[] history)
+        {
+            History_RTB.Text = "";
+            for (int i = 0; i < history.Length; i++)
+            {
+                History_RTB.Text += $"Round {i + 1}:\n Playerd:\t";
+                foreach (var card in history[i].Players_Cards)
+                    History_RTB.Text += $"{card, 2} ";
+                
+                History_RTB.Text += "\n Result:\t";
+                foreach (var card in history[i].Result_Cards)
+                    History_RTB.Text += $"{card, 2} ";
+
+                History_RTB.Text += "\n Winers: ";
+                foreach (var id in history[i].Winers_ID)
+                    History_RTB.Text += $"{id+1} ";
+
+                History_RTB.Text += "\n\n";
+            }
+        }
     }
 }

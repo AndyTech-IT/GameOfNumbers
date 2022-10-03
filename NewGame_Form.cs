@@ -26,12 +26,12 @@ namespace GameOfNumbers
         public NewGame_Form()
         {
             InitializeComponent();
-            _type_names = new string[] { Player_Type.Human.ToString(), Player_Type.Random.ToString() };
+            _type_names = new string[] { Player_Type.Human.ToString(), Player_Type.NeuralNet.ToString(), Player_Type.Random.ToString() };
             _types = new ComboBox[] { Type_CB1, Type_CB2, Type_CB3, Type_CB4 };
             _names = new TextBox[] { Name_TB1, Name_TB2, Name_TB3, Name_TB4 };
             foreach (var cb in _types)
             {
-                cb.Text = _type_names[1];
+                cb.Text = _type_names[2];
                 cb.Items.AddRange(_type_names);
             }
         }
@@ -39,9 +39,11 @@ namespace GameOfNumbers
         private Player GetPlayer(int id)
         {
             if (_types[id].Text == Player_Type.Human.ToString())
-                return new Human_Player(id, _names[id].Text);
+                return new Human_Player(_names[id].Text);
+            if (_types[id].Text == Player_Type.NeuralNet.ToString())
+                return NeuralNetwork_Player.From_File(name: _names[id].Text, index: id);
             if (_types[id].Text == Player_Type.Random.ToString())
-                return new Random_Player(id, _names[id].Text);
+                return new Random_Player(_names[id].Text);
             throw new Exception("Wrond Type!");
         }
 
